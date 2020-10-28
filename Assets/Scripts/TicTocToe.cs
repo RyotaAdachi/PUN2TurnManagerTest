@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class TicTocToe : MonoBehaviour
 {
@@ -10,12 +11,9 @@ public class TicTocToe : MonoBehaviour
     List<Square> squares = new List<Square>();
     List<Square[]> lines = new List<Square[]>();
 
-    void Start()
-    {
-        GenerateBoard();
-    }
+    public UnityAction SelectedAction;
 
-    void GenerateBoard()
+    public void GenerateBoard()
     {
         for (int i = 0; i < 9; i++)
         {
@@ -34,19 +32,23 @@ public class TicTocToe : MonoBehaviour
         lines.Add(new Square[] {squares[2], squares[4], squares[6]});
     }
 
+    public List<Square> GetSquares()
+    {
+        return squares;
+    }
+
     void SelectSquare(Square square)
     {
         Debug.Log("SelectSquare");
-        square.ChangeMark(Square.Marks.Circle);
-
-        if(IsGameEnd())
+        if (square.GetMark() == Square.Marks.None)
         {
-            // Game End
+            square.ChangeMark(Square.Marks.Circle);
+            SelectedAction.Invoke();
+
         }
-        
     }
 
-    bool IsGameEnd()
+    public bool IsGameEnd()
     {
         foreach(Square[] s in lines)
         {
@@ -54,7 +56,6 @@ public class TicTocToe : MonoBehaviour
             {
                 if(s[0].GetMark() == s[1].GetMark() && s[0].GetMark() == s[2].GetMark())
                 {
-                    Debug.Log("Game End!");
                     return true;
                 }
             }

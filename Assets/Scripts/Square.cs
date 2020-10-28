@@ -24,10 +24,9 @@ public class Square : MonoBehaviour
     // コールバック
     public UnityAction<Square> ClickAction;
 
-    public void Init(int id)
+    void Start()
     {
-        mark = Marks.None;
-        Show();
+        ChangeMark(Marks.None);
     }
 
     void Show()
